@@ -94,16 +94,7 @@ authorize_release_store_on_build_host() {
           fi
         "
     else
-      status "Authorizing release store on build host"
-      __sync_remote "
-        [ -f $PROFILE ] && source $PROFILE
-        set -e
-        if [[ \$(ssh-keygen -F \"$_release_store_host\" | grep -c found) = 0 ]]; then
-          echo \"Authorizing $_release_store_host on $HOSTS_APP_USER:\" $SILENCE
-          ssh-keyscan \"$_release_store_host\" 2>/dev/null $SILENCE
-          ssh-keyscan \"$_release_store_host\" 2>/dev/null >> ~/.ssh/known_hosts
-        fi
-      "
+      status "Skipping authorizing release store on build host"
     fi
     AUTHORIZED_RELEASE_STORE_HOST_ON_BUILD_HOST="true"
   fi
