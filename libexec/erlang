@@ -1097,13 +1097,21 @@ remote_clean_release_dir() {
   local _archive="${APP}_${_release_version}.tar.gz"
   status "Cleaning release directory"
   __remote "
+    echo $PROFILE $SILENCE
     [ -f $PROFILE ] && source $PROFILE
     set -e
+    echo \"cd\" $SILENCE
     cd ${_archive_dir} $SILENCE
+    echo $APP $SILENCE
+    echo $VERSION $SILENCE
     [[ \"$RELEASE_CMD\" = \"mix\" ]] && _app_folder=\"${APP}\" || _app_folder=\$(dirname \$(dirname \$(tar -tzf ${_archive} | grep releases/RELEASES)))
+    echo $RELEASE_CMD $SILENCE
+    echo $_archive $SILENCE
     [[ -n \"\$_app_folder\" ]]
+    echo \"APP FOLDER\" $SILENCE
     if [[ -d \$_app_folder ]]; then
       cd \${_app_folder}
+      echo \"cd app_folder\" $SILENCE
       if [[ -d releases ]]; then
         echo \"deleting releases dir in \${_app_folder}\" $SILENCE
         rm -rf releases $SILENCE
@@ -1116,6 +1124,7 @@ remote_clean_release_dir() {
       else
         echo \"lib dir already deleted in \${_app_folder}\" $SILENCE
       fi
+      echo \"grep erts\" $SILENCE
       ls -al | grep erts- > /dev/null && {
         for erts_dir in erts-*; do
           if [[ -n \"\$erts_dir\" ]] && [[ -d \$erts_dir ]]; then
